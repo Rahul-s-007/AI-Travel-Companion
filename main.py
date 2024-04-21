@@ -1,13 +1,14 @@
 import streamlit as st
-import requests
-import json
+from streamlit_folium import st_folium
+from streamlit_extras.stateful_button import button
+
 import folium
 from folium import plugins
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
-import openai
-from streamlit_folium import st_folium
-from streamlit_extras.stateful_button import button
+
+import json
+import requests
 from urllib.parse import quote
 
 import os
@@ -15,11 +16,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Set up the OpenAI API key
-openai.api_key = os.getenv("YOUR_OPENAI_API_KEY")
+from openai import OpenAI
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Set up the Google Maps API key
 google_maps_api_key = os.getenv("GOOGLE_MAPS_API_KEY")
 
+#------------------------------------------------------------------------------------------------------
 # Function to get coordinates from address
 def get_coordinates(address):
     geolocator = Nominatim(user_agent="my_app")
@@ -62,6 +65,7 @@ def fetch_place_images(place_name, api_key = google_maps_api_key):
     else:
         return None
 
+#------------------------------------------------------------------------------------------------------
 # Streamlit app
 def app():
     st.title("AI Travel Buddy")
@@ -79,46 +83,38 @@ def app():
         hotel_coords = get_coordinates(hotel_address)
 
         # Call OpenAI API to generate "Must-Visit" places
-        # prompt = f"For a {num_days}-day trip to {location}, starting from the hotel at {hotel_address}, generate a JSON object with 'Must-Visit' places day-wise, with a short description for each."
-        # response = openai.Completion.create(
-        #     engine="text-davinci-003",
-        #     prompt=prompt,
-        #     max_tokens=2048,
-        #     n=1,
-        #     stop=None,
-        #     temperature=0.7,
-        # )
-        
-        # result = json.loads(response.choices[0].text)
-        
-        result = {"Day 1": [
-                    {
-                    "name": "Central Park",
-                    "description": "A famous urban park in Manhattan with beautiful landscapes, lakes, and attractions like the Central Park Zoo and the Metropolitan Museum of Art."
-                    },
-                    {
-                    "name": "Empire State Building",
-                    "description": "An iconic 102-story skyscraper and one of the most famous buildings in the world, offering stunning views of New York City from its observation decks."
-                    },
-                    {
-                    "name": "Times Square",
-                    "description": "The bright and lively intersection of Broadway and 7th Avenue, known for its massive electronic billboards, entertainment venues, and bustling atmosphere."
-                    }],
-                "Day 2": [
-                    {
-                    "name": "Statue of Liberty",
-                    "description": "A colossal neoclassical sculpture on Liberty Island, a famous landmark and symbol of freedom and democracy."
-                    },
-                    {
-                    "name": "9/11 Memorial & Museum",
-                    "description": "A memorial and museum honoring the victims of the September 11, 2001 terrorist attacks and exploring the history of the events."
-                    },
-                    {
-                    "name": "High Line",
-                    "description": "An elevated park built on a former railroad line, offering unique views of the city and featuring art installations, gardens, and food vendors."
-                    }]
-                }
-        
+        prompt = """You have to plan a """+str(num_days)+"""-day trip to """+location+""", starting from the hotel at """+hotel_address+""",
+generate a JSON object with 'Must-Visit' places day-wise, with a short description for each. Only give JSON as output.
+
+Example output format(JSON):
+{"Day 1": [{
+    "name": "",
+    "description": ""},
+    {"name": "",
+    "description": ""}],
+"Day 2": [{
+    "name": "",
+    "description": ""}]
+}
+"""
+        messages = [
+            {
+                "role": "system",
+                "content": prompt
+            }
+        ]
+        response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
+        temperature=1,
+        max_tokens=1024
+        )
+        # st.text(response)
+        # st.text(response.choices[0].message.content)
+        result = response.choices[0].message.content
+        result = json.loads(result)
+        st.json(result)
+
         # Get coordinates for all places
         day_places = []
         day_coords = []
@@ -183,7 +179,23 @@ if __name__ == "__main__":
     app()
 
 
+
 # Test:
 # location = "New York City, New York, USA"
 # num_days = 2
 # hotel_address = "350 W 39th St, New York, NY 10018"
+
+# PROMPT = """You have to plan a {num_days}-day trip to {location}, starting from the hotel at {hotel_address},
+# generate a JSON object with 'Must-Visit' places day-wise, with a short description for each. Only give JSON as output.
+
+# Example output format(JSON):
+# {"Day 1": [{
+#     "name": "",
+#     "description": ""},
+#     {"name": "",
+#     "description": ""}],
+# "Day 2": [{
+#     "name": "",
+#     "description": ""}]
+# }
+# """
