@@ -14,16 +14,17 @@ Add Stops and Breaks for food: The app could suggest nearby restaurants or cafes
 The "AI Travel Companion" project applies AI techniques, including natural language processing and search algorithms, to transform travel planning. It aims to enhance travelers' experiences by providing efficient, personalized, and informative guidance as they explore new cities.
 
 ## Home Page:
-![](doc_imgs/pharmacies_loc_pins.png)
+![](doc_imgs/home_page.png)
 
 ## Enter Details:
-![](doc_imgs/pharmacies_loc_pins.png)
+![](doc_imgs/enter_details_page.png)
 
 ## LLM Output (Hidden):
-![](doc_imgs/pharmacies_loc_pins.png)
+![](doc_imgs/llm_output.png)
 
 ## Itenerary Output:
-![](doc_imgs/pharmacies_loc_pins.png)
+![](doc_imgs/itenerary.png)
 
 ## Google Maps Links:
-![](doc_imgs/pharmacies_loc_pins.png)
+![](doc_imgs/map_links.png)
+![](doc_imgs/google_maps_iten.png)
