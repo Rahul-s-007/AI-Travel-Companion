@@ -12,3 +12,13 @@ Customizable: Users can customize their itineraries by adding or removing places
 Add Stops and Breaks for food: The app could suggest nearby restaurants or cafes for meals, as well as rest stops for breaks.
 
 The "AI Travel Companion" project applies AI techniques, including natural language processing and search algorithms, to transform travel planning. It aims to enhance travelers' experiences by providing efficient, personalized, and informative guidance as they explore new cities.
+
+## Home Page:
+
+## Enter Details:
+
+## LLM Output (Hidden):
+
+## Itenerary Output:
+
+## Google Maps Links:
