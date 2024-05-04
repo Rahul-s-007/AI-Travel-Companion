@@ -1,0 +1,8 @@
+streamlit
+streamlit-folium
+streamlit-extras
+folium
+geopy
+json
+requests
+python-dotenv
