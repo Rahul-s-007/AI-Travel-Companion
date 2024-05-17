@@ -1,3 +1,5 @@
+# AI-Travel-Companion
+
 The "AI Travel Companion" app is designed to be a comprehensive travel planning assistant. When users input their chosen city and the number of days they plan to spend there, the app generates a customized itinerary for each day. Leveraging AI, it suggests must-visit places and optimizes routes to ensure efficient exploration.
 
 Key Features:
